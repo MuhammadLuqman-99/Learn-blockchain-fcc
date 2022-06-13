@@ -1,2 +1,2 @@
 # Learn-blockchain-fcc
-lesson2
+Basic SmartContract
