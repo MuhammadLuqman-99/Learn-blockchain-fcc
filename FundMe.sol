@@ -8,19 +8,26 @@ pragma solidity ^0.8.8;
 
 import "./PriceConverter.sol";
 
+//untk kurang kn kos gas kita pakai constant, immutable
+// 856277 kos gas
+// 836711
 contract FundMe {
 
     using PriceConverter for uint256;
 
-    uint256 public minimunUsd = 50 * 1e18; // 1 * 10 ** 18
+    uint256 public constant MINIMUM_USD = 50 * 1e18; // 1 * 10 ** 18
+    // 21,415 = with constant = $9
+    // 23,513 = no constant = $10
 
     address [] public funders;
     mapping( address => uint256) public addressToAmountFunded;
     
-    address public owner;
+   address public immutable i_owner;
+    // 21,508 = gas with immutable
+    // 23,644 = without immutable
 
     constructor() {
-        owner = msg.sender;
+        i_owner = msg.sender;
     }
 
     function fund () public payable{
@@ -67,7 +74,7 @@ contract FundMe {
     }
     
     modifier onlyOwner {
-        require(msg.sender == owner, "sender is not owner");
+        require(msg.sender == i_owner, "sender is not owner");
         _;
     }
 }
