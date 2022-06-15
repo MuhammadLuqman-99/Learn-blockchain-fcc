@@ -16,6 +16,12 @@ contract FundMe {
 
     address [] public funders;
     mapping( address => uint256) public addressToAmountFunded;
+    
+    address public owner;
+
+    constructor() {
+        owner = msg.sender;
+    }
 
     function fund () public payable{
         // Want to able set a minimun fund amount in USD
@@ -30,7 +36,7 @@ contract FundMe {
         // = undo any action before, and sent remaining gas back
     }
 
-       function withdraw() public{
+       function withdraw() public onlyOwner {
         // for loop
         // [1, 2, 3, 4]
         //  0. 1. 2. 3.
@@ -58,5 +64,10 @@ contract FundMe {
         // call
         (bool callSuccess, )= payable(msg.sender).call{value: address(this).balance}("");
         require(callSuccess, "callFailed");
+    }
+    
+    modifier onlyOwner {
+        require(msg.sender == owner, "sender is not owner");
+        _;
     }
 }
