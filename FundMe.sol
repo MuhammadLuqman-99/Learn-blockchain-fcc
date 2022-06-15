@@ -11,6 +11,8 @@ import "./PriceConverter.sol";
 //untk kurang kn kos gas kita pakai constant, immutable
 // 856277 kos gas
 // 836711
+
+error NotOwner(); // untk kurangkn gas lagi solidity0.8.4 ke ats blh buat requier tukar ke if untk print error tgk line 80
 contract FundMe {
 
     using PriceConverter for uint256;
@@ -73,8 +75,30 @@ contract FundMe {
         require(callSuccess, "callFailed");
     }
     
-    modifier onlyOwner {
-        require(msg.sender == i_owner, "sender is not owner");
+     modifier onlyOwner {
+        // require(msg.sender == i_owner, "sender is not owner");
+        if(msg.sender !=i_owner) { revert NotOwner(); }
         _;
     }
+    
+        // What happen if someone send this contract ETH without calling fund function
+
+    // receive()
+    receive () external payable {
+        fund();
+    }
+    // fallback()
+    fallback() external payable {
+        fund();
+    }
 }
+
+// yg blm bljr
+// 1.enums
+// 2.Events
+// 3.try/catch
+// 4.function selector
+// 5.abi.encode / decode
+// 6.hashing
+// 7.yul / assumbly
+
