@@ -30,5 +30,33 @@ contract FundMe {
         // = undo any action before, and sent remaining gas back
     }
 
-    // function withdraw(){}
+       function withdraw() public{
+        // for loop
+        // [1, 2, 3, 4]
+        //  0. 1. 2. 3.
+        // for(/* starting index; ending index; step amount */)
+        for(uint256 funderIndex = 0; funderIndex < funders.length; funderIndex++ ) {
+            //code
+            address funder = funders[funderIndex];
+            addressToAmountFunded [funder] = 0;
+        }
+        // reset the array
+        funders = new address[] (0);
+        // actually withdraw the fund
+        
+        // - kalau mcm ni kira code yg // just comment
+
+        // transfer 
+        // msg.sender = address
+        // payable(msg.sender) = payable address
+        //- payable(msg.sender).transfer(address(this).balance);
+
+        // sent 
+        //- bool sendSuccess = payable(msg.sender).send(address(this).balance);
+        //- require(sendSuccess, "Send Failed");
+
+        // call
+        (bool callSuccess, )= payable(msg.sender).call{value: address(this).balance}("");
+        require(callSuccess, "callFailed");
+    }
 }
